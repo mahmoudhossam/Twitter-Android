@@ -5,16 +5,23 @@
 	<uses-sdk android:minSdkVersion="8" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
-	<application android:label="@string/app_name" android:debuggable="true" android:icon="@drawable/twitter_icon">
+	<application android:label="@string/app_name"
+		android:debuggable="true" android:icon="@drawable/twitter_icon">
 		<activity android:name=".TwitterActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-	<activity android:name="Browser" android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:name="Browser" android:theme="@android:style/Theme.NoTitleBar">
+			<intent-filter>
+				<action android:name="mahmoud.browser"></action>
+				<category android:name="android.intent.category.DEFAULT"></category>
+			</intent-filter>
+		</activity>
+	<activity android:name="Tweets">
 	<intent-filter>
-		<action android:name="mahmoud.view"></action>
+		<action android:name="mahmoud.tweets"></action>
 		<category android:name="android.intent.category.DEFAULT"></category>
 	</intent-filter>
 	</activity>

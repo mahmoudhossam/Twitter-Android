@@ -1,57 +1,52 @@
 package info.mahmoudhossam.twitter;
 
-import java.util.List;
-
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.TwitterApi;
-import org.scribe.model.Token;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
-
-import twitter4j.Status;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
+import oauth.signpost.exception.OAuthNotAuthorizedException;
 import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.auth.AccessToken;
 
 public class TwitterBackend {
-	private static Twitter twitter;
-	private OAuthService service;
 	
-	public Twitter getTwitterInstance(String consumerKey,
-			String consumerSecret, Token accessToken){
-		if(twitter == null){
-			ConfigurationBuilder cb = new ConfigurationBuilder();
-			cb.setDebugEnabled(true);
-			cb.setOAuthConsumerKey(consumerKey);
-			cb.setOAuthConsumerSecret(consumerSecret);
-			cb.setOAuthAccessToken(accessToken.getToken());
-			cb.setOAuthAccessTokenSecret(accessToken.getSecret());
-			twitter = new TwitterFactory(cb.build()).getInstance();
-		}
+	private CommonsHttpOAuthConsumer consumer;
+	private CommonsHttpOAuthProvider provider;
+	private static Twitter twitter;
+	private static final String consumerKey = "q6WPy4of06Jin1X1YwRqaw";
+	private static final String consumerSecret = "pbGmIHByoSbsSmw4gSSWPU8KvT43r3F1DW9E0ztRw";
+
+	public void OAuthInit() {
+		consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
+		provider = new CommonsHttpOAuthProvider(
+				"https://api.twitter.com/oauth/request_token",
+				"https://api.twitter.com/oauth/access_token",
+				"https://api.twitter.com/oauth/authorize");
+	}
+
+	public String getAuthorizationURL() throws OAuthMessageSignerException,
+			OAuthNotAuthorizedException, OAuthExpectationFailedException,
+			OAuthCommunicationException {
+		return provider.retrieveRequestToken(consumer, "http://oauth.gmodules.com/gadgets/oauthcallback");
+	}
+
+	public void getAccessToken(String verifier)
+			throws OAuthMessageSignerException, OAuthNotAuthorizedException,
+			OAuthExpectationFailedException, OAuthCommunicationException {
+		provider.retrieveAccessToken(consumer, verifier);
+	}
+
+	public void TwitterInit(){
+		AccessToken token = new AccessToken(consumer.getToken(), consumer.getTokenSecret());
+		twitter = new TwitterFactory().getInstance();
+		twitter.setOAuthConsumer(consumerKey, consumerSecret);
+		twitter.setOAuthAccessToken(token);
+	}
+	
+	public static Twitter getTwitterInstance(){
 		return twitter;
 	}
-	
-	public String oauthConnect(String consumerKey, String consumerSecret){
-    	service = new ServiceBuilder()
-    	.provider(TwitterApi.class).apiKey(consumerKey)
-    	.apiSecret(consumerSecret)
-    	.callback("http://oauth.gmodules.com/gadgets/oauthcallback").build();
-    	return service.getAuthorizationUrl(service.getRequestToken());
-    }
-	
-	public Token getAccessToken(String verifier){
-		return service.getAccessToken(service.getRequestToken(), new Verifier(verifier));
-	}
-	
-	public List<Status> getTimeline() throws TwitterException{
-		return twitter.getHomeTimeline();
-		
-	}
-	
-	public void updateStatus(String status) throws TwitterException{
-		twitter.updateStatus(status);
-	}
-	
 
 }

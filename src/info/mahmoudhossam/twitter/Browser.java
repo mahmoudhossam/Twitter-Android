@@ -11,7 +11,6 @@ import android.webkit.WebViewClient;
 public class Browser extends Activity {
 
 	private WebView webView;
-	private String Url;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +18,7 @@ public class Browser extends Activity {
 		setContentView(R.layout.browser);
 		webView = (WebView) findViewById(R.id.webView1);
 		webView.getSettings().setJavaScriptEnabled(true);
-		Url = getIntent().getExtras().getString("url");
+		String Url = getIntent().getExtras().getString("url");
 		webView.setWebViewClient(new WebBrowser());
 		webView.loadUrl(Url);
 	}

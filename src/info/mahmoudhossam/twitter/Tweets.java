@@ -1,11 +1,11 @@
 package info.mahmoudhossam.twitter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.net.Uri;
@@ -16,30 +16,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class Tweets extends ListActivity {
 
-	List<Status> tweets;
-	
+	private List<twitter4j.Status> tweets;
+	private Twitter twitter;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		getListView().setTextFilterEnabled(true);
-		tweets = new ArrayList<Status>();
-		setListAdapter(new myAdapter(this, R.layout.tweets, tweets));
+		
+		RetrieveTweets rt = new RetrieveTweets();
+		rt.execute(twitter);
+		ListView lv = getListView();
+		lv.setAdapter(new myAdapter(this, R.layout.tweets, tweets));
 	}
 
-	class myAdapter extends ArrayAdapter<List<Status>> {
+	class myAdapter extends BaseAdapter {
 
-		private List<Status> list;
-		
-		public myAdapter(Context context, int resource, List<Status> objects) {
-			super(context, resource);
-			list = objects;
+		private List<twitter4j.Status> list;
+
+		public myAdapter(Context context, int resource, List<Status> tweets) {
+			list = tweets;
 		}
 
 		@Override
@@ -53,18 +57,34 @@ public class Tweets extends ListActivity {
 			TextView time = (TextView) convertView.findViewById(R.id.timestamp);
 			ImageView avatar = (ImageView) convertView
 					.findViewById(R.id.avatar);
-			for(Status s : list){
+			for (Status s : list) {
 				text.setText(s.getText());
 				name.setText(s.getUser().getName());
 				time.setText(s.getCreatedAt().toString());
-				avatar.setImageURI(Uri.parse(s.getUser().getProfileImageURL().toString()));
+				avatar.setImageURI(Uri.parse(s.getUser().getProfileBackgroundImageUrl()));
 			}
 
 			return convertView;
 		}
+
+		@Override
+		public int getCount() {
+			return list.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return list.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return list.get(position).getId();
+		}
 	}
 
-	class RetrieveTweets extends AsyncTask<Twitter, Integer, List<Status>> {
+	class RetrieveTweets extends
+			AsyncTask<Twitter, Integer, List<Status>> {
 
 		@Override
 		protected void onPreExecute() {
@@ -72,13 +92,14 @@ public class Tweets extends ListActivity {
 		}
 
 		@Override
-		protected List<twitter4j.Status> doInBackground(Twitter... params) {
+		protected List<twitter4j.Status> doInBackground(
+				Twitter... params) {
 			try {
 				return params[0].getHomeTimeline();
 			} catch (TwitterException e) {
-				Log.e("TwitterApp", e.getErrorMessage());
-				return null;
+				Log.e("Twitter", e.getMessage());
 			}
+			return null;
 		}
 
 		@Override

@@ -1,11 +1,10 @@
 **Twitter-Android**
 
-=========================
 
-This is a small app I made to practice working with oAuth on Android devices.
+This is a small app I made to practice working with OAuth on Android devices.
 
 ##Dependencies
 
-*[commons-codec](http://commons.apache.org/codec)
+*[oauth-signpost](https://github.com/kaeppler/signpost)
 
-*[scribe](https://github.com/fernandezpablo85/scribe-java)
+*[twitter4j](http://twitter4j.org/en/index.html)

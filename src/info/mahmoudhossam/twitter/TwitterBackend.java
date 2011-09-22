@@ -11,41 +11,47 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
 public class TwitterBackend {
-	
-	private CommonsHttpOAuthConsumer consumer;
-	private CommonsHttpOAuthProvider provider;
+
 	private static Twitter twitter;
 	private static final String consumerKey = "q6WPy4of06Jin1X1YwRqaw";
 	private static final String consumerSecret = "pbGmIHByoSbsSmw4gSSWPU8KvT43r3F1DW9E0ztRw";
-
-	public void OAuthInit() {
-		consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
-		provider = new CommonsHttpOAuthProvider(
-				"https://api.twitter.com/oauth/request_token",
-				"https://api.twitter.com/oauth/access_token",
-				"https://api.twitter.com/oauth/authorize");
-	}
+	private static final CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
+			consumerKey, consumerSecret);
+	private static final CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(
+			"https://api.twitter.com/oauth/request_token",
+			"https://api.twitter.com/oauth/access_token",
+			"https://api.twitter.com/oauth/authorize");;
+	private AccessToken token;
 
 	public String getAuthorizationURL() throws OAuthMessageSignerException,
 			OAuthNotAuthorizedException, OAuthExpectationFailedException,
 			OAuthCommunicationException {
-		return provider.retrieveRequestToken(consumer, "http://oauth.gmodules.com/gadgets/oauthcallback");
+		return provider.retrieveRequestToken(consumer,
+				"http://oauth.gmodules.com/gadgets/oauthcallback");
 	}
 
-	public void getAccessToken(String verifier)
+	public AccessToken getAccessToken() {
+		return token;
+	}
+
+	public void setAccessToken(String verifier)
 			throws OAuthMessageSignerException, OAuthNotAuthorizedException,
 			OAuthExpectationFailedException, OAuthCommunicationException {
 		provider.retrieveAccessToken(consumer, verifier);
 	}
 
-	public void TwitterInit(){
-		AccessToken token = new AccessToken(consumer.getToken(), consumer.getTokenSecret());
+	public void twitterInit() {
+		token = new AccessToken(consumer.getToken(), consumer.getTokenSecret());
+		twitterInit(token);
+	}
+	
+	public void twitterInit(AccessToken token){
 		twitter = new TwitterFactory().getInstance();
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		twitter.setOAuthAccessToken(token);
 	}
-	
-	public static Twitter getTwitterInstance(){
+
+	public static Twitter getTwitterInstance() {
 		return twitter;
 	}
 

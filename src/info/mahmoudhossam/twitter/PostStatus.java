@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class PostStatus extends Activity {
 
@@ -22,6 +23,7 @@ public class PostStatus extends Activity {
 	public void onTweet(View view) throws TwitterException{
 		String tweet = text.getText().toString();
 		twitter.updateStatus(tweet);
+		Toast.makeText(getApplicationContext(), "Posted", Toast.LENGTH_SHORT).show();
 	}
 
 }

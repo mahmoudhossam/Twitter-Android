@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-public class Main extends ListActivity {
+public class Login extends ListActivity {
 
 	private static final int OAUTH_REQUEST = 1;
 	private static final String PREFS = "prefs";
@@ -24,10 +24,10 @@ public class Main extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
 		initializeVariables();
 		if (tokenExists()) {
 			backend.twitterInit(getToken());
+			startActivity(new Intent("mahmoud.main"));
 		} else {
 			try {
 				login();
@@ -80,7 +80,8 @@ public class Main extends ListActivity {
 				Log.e("Twitter", e.getMessage());
 			}
 			backend.twitterInit();
-			startActivity(new Intent("mahmoud.post"));
+			startActivity(new Intent("mahmoud.tweets"));
+			finish();
 		} else if (resultCode == RESULT_CANCELED) {
 			Toast.makeText(this,
 					"Cannot connect to twitter, app not authorized",

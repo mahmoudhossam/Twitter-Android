@@ -10,5 +10,6 @@
 			<attribute name="javadoc_location" value="jar:file:/media/Data/java/twitter4j-2.2.4/twitter4j-core/twitter4j-core-2.2.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="actionbar_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

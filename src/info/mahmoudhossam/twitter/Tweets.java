@@ -5,64 +5,62 @@ import java.util.List;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class Tweets extends ListActivity {
+import com.markupartist.android.widget.ActionBar;
 
-	private List<twitter4j.Status> tweets;
+public class Tweets extends Activity {
+
 	private Twitter twitter;
+	private ActionBar actionbar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		getListView().setTextFilterEnabled(true);
-		
-		RetrieveTweets rt = new RetrieveTweets();
-		rt.execute(twitter);
-		ListView lv = getListView();
-		lv.setAdapter(new myAdapter(this, R.layout.tweets, tweets));
+		setContentView(R.layout.tweets);
+		initializeVariables();
+		new RetrieveTweets().execute(twitter);
+	}
+
+	private void initializeVariables() {
+		actionbar = (ActionBar) findViewById(R.id.actionBar1);
+		twitter = TwitterBackend.getTwitterInstance();
 	}
 
 	class myAdapter extends BaseAdapter {
 
-		private List<twitter4j.Status> list;
+		private List<Status> list;
+		private int layout;
 
 		public myAdapter(Context context, int resource, List<Status> tweets) {
 			list = tweets;
+			layout = resource;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = getLayoutInflater();
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.tweets, null);
+				LayoutInflater inflater = getLayoutInflater();
+				convertView = inflater.inflate(layout, null);
 			}
 			TextView text = (TextView) convertView.findViewById(R.id.tweet);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView time = (TextView) convertView.findViewById(R.id.timestamp);
-			ImageView avatar = (ImageView) convertView
-					.findViewById(R.id.avatar);
-			for (Status s : list) {
-				text.setText(s.getText());
-				name.setText(s.getUser().getName());
-				time.setText(s.getCreatedAt().toString());
-				avatar.setImageURI(Uri.parse(s.getUser().getProfileBackgroundImageUrl()));
-			}
+			Status current = list.get(position);
+			text.setText(current.getText());
+			name.setText(current.getUser().getName());
+			time.setText("" + current.getCreatedAt().getHours() + ":"
+					+ current.getCreatedAt().getMinutes());
 
 			return convertView;
 		}
@@ -79,21 +77,19 @@ public class Tweets extends ListActivity {
 
 		@Override
 		public long getItemId(int position) {
-			return list.get(position).getId();
+			return list.get(position).hashCode();
 		}
 	}
 
-	class RetrieveTweets extends
-			AsyncTask<Twitter, Integer, List<Status>> {
+	class RetrieveTweets extends AsyncTask<Twitter, Integer, List<Status>> {
 
 		@Override
 		protected void onPreExecute() {
-			setProgressBarIndeterminateVisibility(true);
+			actionbar.setProgressBarVisibility(ActionBar.VISIBLE);
 		}
 
 		@Override
-		protected List<twitter4j.Status> doInBackground(
-				Twitter... params) {
+		protected List<twitter4j.Status> doInBackground(Twitter... params) {
 			try {
 				return params[0].getHomeTimeline();
 			} catch (TwitterException e) {
@@ -104,8 +100,10 @@ public class Tweets extends ListActivity {
 
 		@Override
 		protected void onPostExecute(List<twitter4j.Status> result) {
-			tweets = result;
-			setProgressBarIndeterminateVisibility(false);
+			ListView lv = (ListView) findViewById(R.id.listview1);
+			lv.setAdapter(new myAdapter(getApplicationContext(),
+					R.layout.tweet, result));
+			actionbar.setProgressBarVisibility(ActionBar.INVISIBLE);
 		}
 
 	}

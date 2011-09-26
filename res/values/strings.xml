@@ -9,4 +9,9 @@
 	<string name="home">Timeline</string>
 	<string name="replies">Mentions</string>
 	<string name="search">Search</string>
+	<string-array name="main_menu">
+		<item>New Tweet</item>
+		<item>Timeline</item>
+		<item>Mentions</item>
+	</string-array>
 </resources>

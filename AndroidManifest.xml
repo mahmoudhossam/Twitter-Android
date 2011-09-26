@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="info.mahmoudhossam.twitter" android:versionCode="1"
 	android:versionName="1.0">
-	<uses-sdk android:minSdkVersion="8" />
+	<uses-sdk android:minSdkVersion="7"/>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
 	<application android:label="@string/app_name" android:icon="@drawable/twitter_icon"
 		android:debuggable="false">
-		<activity android:name=".Main" android:label="@string/app_name">
+		<activity android:name=".Login" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -25,10 +25,16 @@
 				<category android:name="android.intent.category.DEFAULT"></category>
 			</intent-filter>
 		</activity>
-	<activity android:name="PostStatus" android:label="New Tweet">
+		<activity android:name="PostStatus" android:label="New Tweet">
+			<intent-filter>
+				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="mahmoud.post"></action>
+			</intent-filter>
+		</activity>
+	<activity android:name="MainActivity">
 	<intent-filter>
+		<action android:name="mahmoud.main"></action>
 		<category android:name="android.intent.category.DEFAULT"></category>
-		<action android:name="mahmoud.post"></action>
 	</intent-filter>
 	</activity>
 

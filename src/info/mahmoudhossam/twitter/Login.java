@@ -20,6 +20,8 @@ public class Login extends ListActivity {
 	private static final String PREFS = "prefs";
 	private TwitterBackend backend;
 	SharedPreferences prefs;
+	static String consumerKey;
+	static String consumerSecret;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,8 @@ public class Login extends ListActivity {
 		initializeVariables();
 		if (tokenExists()) {
 			backend.twitterInit(getToken());
-			startActivity(new Intent("mahmoud.main"));
+			startActivity(new Intent("mahmoud.tweets"));
+			finish();
 		} else {
 			try {
 				login();
@@ -44,16 +47,18 @@ public class Login extends ListActivity {
 
 	}
 
-	public void logError(Exception e) {
+	private void logError(Exception e) {
 		Log.e("Twitter", e.getMessage());
 	}
 
-	public void initializeVariables() {
+	private void initializeVariables() {
+		consumerKey = getResources().getString(R.string.consumer_key);
+		consumerSecret = getResources().getString(R.string.consumer_secret);
 		backend = new TwitterBackend();
 		prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
 	}
 
-	public void login() throws OAuthMessageSignerException,
+	private void login() throws OAuthMessageSignerException,
 			OAuthNotAuthorizedException, OAuthExpectationFailedException,
 			OAuthCommunicationException {
 		Intent intent = new Intent("mahmoud.browser");
@@ -71,15 +76,16 @@ public class Login extends ListActivity {
 			try {
 				backend.setAccessToken(verifier);
 			} catch (OAuthMessageSignerException e) {
-				Log.e("Twitter", e.getMessage());
+				logError(e);
 			} catch (OAuthNotAuthorizedException e) {
-				Log.e("Twitter", e.getMessage());
+				logError(e);
 			} catch (OAuthExpectationFailedException e) {
-				Log.e("Twitter", e.getMessage());
+				logError(e);
 			} catch (OAuthCommunicationException e) {
-				Log.e("Twitter", e.getMessage());
+				logError(e);
 			}
 			backend.twitterInit();
+			saveToken();
 			startActivity(new Intent("mahmoud.tweets"));
 			finish();
 		} else if (resultCode == RESULT_CANCELED) {
@@ -89,11 +95,11 @@ public class Login extends ListActivity {
 		}
 	}
 
-	public boolean tokenExists() {
+	private boolean tokenExists() {
 		return prefs.contains("oauth_token") && prefs.contains("oauth_secret");
 	}
 
-	public void saveToken() {
+	private void saveToken() {
 		AccessToken token = backend.getAccessToken();
 		if (token != null) {
 			Editor editor = prefs.edit();
@@ -103,7 +109,7 @@ public class Login extends ListActivity {
 		}
 	}
 
-	public AccessToken getToken() {
+	private AccessToken getToken() {
 		String token = prefs.getString("oauth_token", null);
 		String secret = prefs.getString("oauth_secret", null);
 		AccessToken accessToken = new AccessToken(token, secret);

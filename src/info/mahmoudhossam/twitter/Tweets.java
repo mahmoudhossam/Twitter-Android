@@ -5,7 +5,7 @@ import java.util.List;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.markupartist.android.widget.ActionBar;
 
-public class Tweets extends Activity {
+public class Tweets extends ListActivity{
 
 	private Twitter twitter;
 	private ActionBar actionbar;
@@ -77,8 +77,14 @@ public class Tweets extends Activity {
 
 		@Override
 		public long getItemId(int position) {
-			return list.get(position).hashCode();
+			return getItem(position).hashCode();
 		}
+
+		@Override
+		public boolean isEmpty() {
+			return getCount() == 0;
+		}
+		
 	}
 
 	class RetrieveTweets extends AsyncTask<Twitter, Integer, List<Status>> {
@@ -100,7 +106,7 @@ public class Tweets extends Activity {
 
 		@Override
 		protected void onPostExecute(List<twitter4j.Status> result) {
-			ListView lv = (ListView) findViewById(R.id.listview1);
+			ListView lv = getListView();
 			lv.setAdapter(new myAdapter(getApplicationContext(),
 					R.layout.tweet, result));
 			actionbar.setProgressBarVisibility(ActionBar.INVISIBLE);

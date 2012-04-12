@@ -13,10 +13,10 @@ import twitter4j.auth.AccessToken;
 public class TwitterBackend {
 
 	private static Twitter twitter;
-	private static final String consumerKey = "q6WPy4of06Jin1X1YwRqaw";
-	private static final String consumerSecret = "pbGmIHByoSbsSmw4gSSWPU8KvT43r3F1DW9E0ztRw";
+	private static final String CONSUMER_KEY = Login.consumerKey;
+	private static final String CONSUMER_SECRET = Login.consumerSecret;
 	private static final CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
-			consumerKey, consumerSecret);
+			CONSUMER_KEY, CONSUMER_SECRET);
 	private static final CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(
 			"https://api.twitter.com/oauth/request_token",
 			"https://api.twitter.com/oauth/access_token",
@@ -47,7 +47,7 @@ public class TwitterBackend {
 	
 	public void twitterInit(AccessToken token){
 		twitter = new TwitterFactory().getInstance();
-		twitter.setOAuthConsumer(consumerKey, consumerSecret);
+		twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 		twitter.setOAuthAccessToken(token);
 	}
 

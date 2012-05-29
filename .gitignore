@@ -3,3 +3,5 @@
 values/twitter.xml
 bin/*
 gen/*
+/gen
+/bin

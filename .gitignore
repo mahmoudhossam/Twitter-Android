@@ -1,7 +1,6 @@
 .project
 .classpath
+.settings/
 values/twitter.xml
-bin/*
-gen/*
-/gen
-/bin
+bin/
+gen/

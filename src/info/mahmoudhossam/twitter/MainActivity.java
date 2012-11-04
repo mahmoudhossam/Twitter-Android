@@ -1,16 +1,14 @@
 package info.mahmoudhossam.twitter;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setListAdapter(new ArrayAdapter<String>(getApplicationContext(),
-				android.R.layout.simple_list_item_1, R.array.main_menu));
+		
 	}
 
 }

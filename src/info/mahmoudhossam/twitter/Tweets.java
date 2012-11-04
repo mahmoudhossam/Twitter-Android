@@ -17,12 +17,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.markupartist.android.widget.ActionBar;
-
 public class Tweets extends ListActivity{
 
 	private Twitter twitter;
-	private ActionBar actionbar;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,6 @@ public class Tweets extends ListActivity{
 	}
 
 	private void initializeVariables() {
-		actionbar = (ActionBar) findViewById(R.id.actionBar1);
 		twitter = TwitterBackend.getTwitterInstance();
 	}
 
@@ -55,12 +52,9 @@ public class Tweets extends ListActivity{
 			}
 			TextView text = (TextView) convertView.findViewById(R.id.tweet);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
-			TextView time = (TextView) convertView.findViewById(R.id.timestamp);
 			Status current = list.get(position);
 			text.setText(current.getText());
 			name.setText(current.getUser().getName());
-			time.setText("" + current.getCreatedAt().getHours() + ":"
-					+ current.getCreatedAt().getMinutes());
 
 			return convertView;
 		}
@@ -90,11 +84,6 @@ public class Tweets extends ListActivity{
 	class RetrieveTweets extends AsyncTask<Twitter, Integer, List<Status>> {
 
 		@Override
-		protected void onPreExecute() {
-			actionbar.setProgressBarVisibility(ActionBar.VISIBLE);
-		}
-
-		@Override
 		protected List<twitter4j.Status> doInBackground(Twitter... params) {
 			try {
 				return params[0].getHomeTimeline();
@@ -109,7 +98,6 @@ public class Tweets extends ListActivity{
 			ListView lv = getListView();
 			lv.setAdapter(new myAdapter(getApplicationContext(),
 					R.layout.tweet, result));
-			actionbar.setProgressBarVisibility(ActionBar.INVISIBLE);
 		}
 
 	}

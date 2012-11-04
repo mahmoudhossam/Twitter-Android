@@ -1,11 +1,8 @@
 package info.mahmoudhossam.twitter;
 
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
+import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -14,56 +11,47 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-public class Login extends ListActivity {
+public class Login extends Activity {
 
 	private static final int OAUTH_REQUEST = 1;
 	private static final String PREFS = "prefs";
 	private TwitterBackend backend;
-	SharedPreferences prefs;
+	private SharedPreferences prefs;
 	static String consumerKey;
 	static String consumerSecret;
+	private AccessToken token;
+	
+	private void initializeVariables() {
+		consumerKey = getResources().getString(R.string.consumer_key);
+		consumerSecret = getResources().getString(R.string.consumer_secret);
+		backend = new TwitterBackend(consumerKey, consumerSecret);
+		prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initializeVariables();
 		if (tokenExists()) {
-			backend.twitterInit(getToken());
-			startActivity(new Intent("mahmoud.tweets"));
+			getToken();
+			backend.twitterInit(token);
+			startActivity(new Intent("mahmoud.post"));
 			finish();
 		} else {
-			try {
-				login();
-			} catch (OAuthMessageSignerException e) {
-				logError(e);
-			} catch (OAuthNotAuthorizedException e) {
-				logError(e);
-			} catch (OAuthExpectationFailedException e) {
-				logError(e);
-			} catch (OAuthCommunicationException e) {
-				logError(e);
-			}
+			login();
 		}
 
 	}
 
-	private void logError(Exception e) {
-		Log.e("Twitter", e.getMessage());
-	}
-
-	private void initializeVariables() {
-		consumerKey = getResources().getString(R.string.consumer_key);
-		consumerSecret = getResources().getString(R.string.consumer_secret);
-		backend = new TwitterBackend();
-		prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
-	}
-
-	private void login() throws OAuthMessageSignerException,
-			OAuthNotAuthorizedException, OAuthExpectationFailedException,
-			OAuthCommunicationException {
+	private void login() {
 		Intent intent = new Intent("mahmoud.browser");
-		Log.i("URL", backend.getAuthorizationURL());
-		intent.putExtra("url", backend.getAuthorizationURL());
+		String url = null;
+		try {
+			url = backend.getAuthorizationURL();
+		} catch (TwitterException e) {
+			Log.e("twitter", e.getMessage());
+		}
+		intent.putExtra("url", url);
 		startActivityForResult(intent, OAUTH_REQUEST);
 	}
 
@@ -75,18 +63,12 @@ public class Login extends ListActivity {
 			Log.i("Verifier", verifier);
 			try {
 				backend.setAccessToken(verifier);
-			} catch (OAuthMessageSignerException e) {
-				logError(e);
-			} catch (OAuthNotAuthorizedException e) {
-				logError(e);
-			} catch (OAuthExpectationFailedException e) {
-				logError(e);
-			} catch (OAuthCommunicationException e) {
-				logError(e);
+			} catch (TwitterException e) {
+				Log.e("twitter", e.getMessage());
 			}
 			backend.twitterInit();
 			saveToken();
-			startActivity(new Intent("mahmoud.tweets"));
+			startActivity(new Intent("mahmoud.post"));
 			finish();
 		} else if (resultCode == RESULT_CANCELED) {
 			Toast.makeText(this,
@@ -100,7 +82,7 @@ public class Login extends ListActivity {
 	}
 
 	private void saveToken() {
-		AccessToken token = backend.getAccessToken();
+		token = backend.getAccessToken();
 		if (token != null) {
 			Editor editor = prefs.edit();
 			editor.putString("oauth_token", token.getToken());
@@ -109,11 +91,13 @@ public class Login extends ListActivity {
 		}
 	}
 
-	private AccessToken getToken() {
-		String token = prefs.getString("oauth_token", null);
+	private void getToken() {
+		String accessToken = prefs.getString("oauth_token", null);
 		String secret = prefs.getString("oauth_secret", null);
-		AccessToken accessToken = new AccessToken(token, secret);
-		return accessToken;
+		if (accessToken != null && secret != null) {
+			token = new AccessToken(accessToken, secret);
+		}
+		
 	}
 
 }

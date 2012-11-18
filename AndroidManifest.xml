@@ -2,38 +2,37 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="info.mahmoudhossam.twitter" android:versionCode="1"
 	android:versionName="1.0">
-	<uses-sdk android:minSdkVersion="7"/>
+	<uses-sdk android:minSdkVersion="7"
+	    android:targetSdkVersion="15"/>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
 	<application android:label="@string/app_name" android:icon="@drawable/twitter_icon"
-		android:debuggable="false">
+		android:allowBackup="true">
+
 		<activity android:name=".Login" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="Browser" android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:name="Browser" android:theme="@android:style/Theme.NoTitleBar"
+		    android:exported="false">
 			<intent-filter>
-				<action android:name="mahmoud.browser"></action>
 				<category android:name="android.intent.category.DEFAULT"></category>
 			</intent-filter>
 		</activity>
-		<activity android:name="Tweets">
+		<activity android:name="info.mahmoudhossam.twitter.HomeTweets" android:exported="false">
 			<intent-filter>
-				<action android:name="mahmoud.tweets"></action>
 				<category android:name="android.intent.category.DEFAULT"></category>
 			</intent-filter>
 		</activity>
-		<activity android:name="PostStatus" android:label="New Tweet">
+		<activity android:name="PostStatus" android:label="New Tweet" android:exported="false">
 			<intent-filter>
 				<category android:name="android.intent.category.DEFAULT"></category>
-				<action android:name="mahmoud.post"></action>
 			</intent-filter>
 		</activity>
-	<activity android:name="MainActivity">
+	<activity android:name="MainActivity" android:exported="false">
 	<intent-filter>
-		<action android:name="mahmoud.main"></action>
 		<category android:name="android.intent.category.DEFAULT"></category>
 	</intent-filter>
 	</activity>

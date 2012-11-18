@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/refresh"
+        android:showAsAction="always"
+        android:title="@string/refresh">
+    </item>
+    <item
+        android:id="@+id/compose"
+        android:showAsAction="always"
+        android:title="@string/compose">
+    </item>
+    <item
+        android:id="@+id/mentions"
+        android:showAsAction="collapseActionView"
+        android:title="@string/mentions">
+    </item>
+    <item
+        android:id="@+id/me"
+        android:icon="@drawable/profile"
+        android:showAsAction="collapseActionView"
+        android:title="@string/my_profile">
+    </item>
+
+</menu>

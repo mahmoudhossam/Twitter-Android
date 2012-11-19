@@ -2,102 +2,51 @@ package info.mahmoudhossam.twitter;
 
 import java.util.List;
 
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import android.app.ListActivity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
-public class Tweets extends ListActivity{
+import com.actionbarsherlock.app.SherlockListFragment;
+
+public class HomeTweets extends SherlockListFragment {
 
 	private Twitter twitter;
-	
+	private Paging paging;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tweets);
 		initializeVariables();
-		new RetrieveTweets().execute(twitter);
+		new RetrieveTweets().execute(paging);
 	}
 
 	private void initializeVariables() {
 		twitter = TwitterBackend.getTwitterInstance();
+		paging = new Paging(1, 20);
 	}
 
-	class myAdapter extends BaseAdapter {
-
-		private List<Status> list;
-		private int layout;
-
-		public myAdapter(Context context, int resource, List<Status> tweets) {
-			list = tweets;
-			layout = resource;
-		}
+	class RetrieveTweets extends AsyncTask<Paging, Integer, List<Status>> {
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				LayoutInflater inflater = getLayoutInflater();
-				convertView = inflater.inflate(layout, null);
-			}
-			TextView text = (TextView) convertView.findViewById(R.id.tweet);
-			TextView name = (TextView) convertView.findViewById(R.id.name);
-			Status current = list.get(position);
-			text.setText(current.getText());
-			name.setText(current.getUser().getName());
-
-			return convertView;
-		}
-
-		@Override
-		public int getCount() {
-			return list.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return list.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return getItem(position).hashCode();
-		}
-
-		@Override
-		public boolean isEmpty() {
-			return getCount() == 0;
-		}
-		
-	}
-
-	class RetrieveTweets extends AsyncTask<Twitter, Integer, List<Status>> {
-
-		@Override
-		protected List<twitter4j.Status> doInBackground(Twitter... params) {
+		protected List<twitter4j.Status> doInBackground(Paging... params) {
 			try {
-				return params[0].getHomeTimeline();
+				return twitter.getHomeTimeline(params[0]);
 			} catch (TwitterException e) {
 				Log.e("Twitter", e.getMessage());
+				return null;
 			}
-			return null;
 		}
 
 		@Override
 		protected void onPostExecute(List<twitter4j.Status> result) {
-			ListView lv = getListView();
-			lv.setAdapter(new myAdapter(getApplicationContext(),
-					R.layout.tweet, result));
+			if (result != null) {
+				setListAdapter(new TweetAdapter(getActivity()
+						.getApplicationContext(), R.layout.tweet, result));
+			}
 		}
 
 	}

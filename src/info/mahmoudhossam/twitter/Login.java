@@ -1,6 +1,5 @@
 package info.mahmoudhossam.twitter;
 
-import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 public class Login extends Activity {
@@ -35,8 +33,8 @@ public class Login extends Activity {
 		if (tokenExists()) {
 			getToken();
 			backend.twitterInit(token);
-			startActivity(new Intent("mahmoud.post"));
 			finish();
+			startActivity(new Intent(getApplicationContext(), MainActivity.class));
 		} else {
 			login();
 		}
@@ -44,13 +42,8 @@ public class Login extends Activity {
 	}
 
 	private void login() {
-		Intent intent = new Intent("mahmoud.browser");
-		String url = null;
-		try {
-			url = backend.getAuthorizationURL();
-		} catch (TwitterException e) {
-			Log.e("twitter", e.getMessage());
-		}
+		Intent intent = new Intent(getApplicationContext(), Browser.class);
+		String url = backend.getAuthorizationURL();
 		intent.putExtra("url", url);
 		startActivityForResult(intent, OAUTH_REQUEST);
 	}
@@ -60,16 +53,11 @@ public class Login extends Activity {
 		if (requestCode == OAUTH_REQUEST && resultCode == RESULT_OK) {
 			Uri url = Uri.parse(data.getExtras().getString("url"));
 			String verifier = url.getQueryParameter("oauth_verifier");
-			Log.i("Verifier", verifier);
-			try {
-				backend.setAccessToken(verifier);
-			} catch (TwitterException e) {
-				Log.e("twitter", e.getMessage());
-			}
+			backend.setAccessToken(verifier);
 			backend.twitterInit();
 			saveToken();
-			startActivity(new Intent("mahmoud.post"));
 			finish();
+			startActivity(new Intent(getApplicationContext(), MainActivity.class));
 		} else if (resultCode == RESULT_CANCELED) {
 			Toast.makeText(this,
 					"Cannot connect to twitter, app not authorized",

@@ -1,5 +1,9 @@
 package info.mahmoudhossam.twitter;
 
+import java.util.concurrent.ExecutionException;
+
+import android.os.AsyncTask;
+import android.util.Log;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -18,9 +22,15 @@ public class TwitterBackend {
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 	}
 
-	public String getAuthorizationURL() throws TwitterException {
-		requestToken = twitter.getOAuthRequestToken(CALLBACK_URL);
-		return requestToken.getAuthorizationURL();
+	public String getAuthorizationURL() {
+		try {
+			return new AuthURLGetter().execute().get();
+		} catch (InterruptedException e) {
+			Log.e("twitter", e.getMessage());
+		} catch (ExecutionException e) {
+			Log.e("twitter", e.getMessage());
+		}
+		return null;
 	}
 
 	public AccessToken getAccessToken() {
@@ -31,8 +41,14 @@ public class TwitterBackend {
 		token = new AccessToken(accessToken, tokenSecret);
 	}
 
-	public void setAccessToken(String verifier) throws TwitterException {
-		token = twitter.getOAuthAccessToken(requestToken, verifier);
+	public void setAccessToken(String verifier) {
+		try {
+			token = new AccessTokenGetter().execute(verifier).get();
+		} catch (InterruptedException e) {
+			Log.e("Twitter", e.getMessage());
+		} catch (ExecutionException e) {
+			Log.e("Twitter", e.getMessage());
+		}
 	}
 
 	public void twitterInit(AccessToken accessToken) {
@@ -46,6 +62,33 @@ public class TwitterBackend {
 
 	public static Twitter getTwitterInstance() {
 		return twitter;
+	}
+
+	class AuthURLGetter extends AsyncTask<String, Integer, String> {
+
+		@Override
+		protected String doInBackground(String... arg0) {
+			try {
+				requestToken = twitter.getOAuthRequestToken(CALLBACK_URL);
+				return requestToken.getAuthorizationURL();
+			} catch (TwitterException e) {
+				Log.e("Twitter", e.getMessage());
+				return null;
+			}
+		}
+	}
+
+	class AccessTokenGetter extends AsyncTask<String, Integer, AccessToken> {
+
+		@Override
+		protected AccessToken doInBackground(String... arg0) {
+			try {
+				return twitter.getOAuthAccessToken(requestToken, arg0[0]);
+			} catch (TwitterException e) {
+				Log.e("Twitter", e.getMessage());
+				return null;
+			}
+		}
 	}
 
 }

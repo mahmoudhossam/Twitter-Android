@@ -3,7 +3,6 @@ package info.mahmoudhossam.twitter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -34,7 +33,6 @@ public class Browser extends Activity {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-			Log.i("browser", url);
 			Intent data = new Intent("result");
 			if(url.contains("verifier")){
 				data.putExtra("url", url);

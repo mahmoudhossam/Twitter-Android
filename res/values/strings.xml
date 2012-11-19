@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="hello">Hello World, TwitterActivity!</string>
-	<string name="app_name">Twitter</string>
-	<string name="name">Twitter Username</string>
-	<string name="password">Password</string>
-	<string name="login">Login</string>
-	<string name="tweet">Tweet</string>
-	<string name="home">Timeline</string>
-	<string name="replies">Mentions</string>
-	<string name="search">Search</string>
-	<string-array name="main_menu">
-		<item>New Tweet</item>
-		<item>Timeline</item>
-		<item>Mentions</item>
-	</string-array>
+
+    <string name="hello">Hello World, TwitterActivity!</string>
+    <string name="app_name">Twitter</string>
+    <string name="name">Twitter Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="tweet">Tweet</string>
+    <string name="home">Timeline</string>
+    <string name="replies">Mentions</string>
+    <string name="search">Search</string>
+    <string name="compose">New Tweet</string>
+    <string name="timeline">Timeline</string>
+    <string name="mentions">Mentions</string>
+    <string name="my_profile">My profile</string>
+    <string name="refresh">Refresh</string>
+
 </resources>

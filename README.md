@@ -1,10 +1,10 @@
 **Twitter-Android**
 
 
-This is a small app I made to practice working with OAuth on Android devices.
+Twitter on Android, need I say more?
 
 ##Dependencies
 
-*[oauth-signpost](https://github.com/kaeppler/signpost)
+* [ActionBarSherlock](http://actionbarsherlock.com/)
 
-*[twitter4j](http://twitter4j.org/en/index.html)
+* [twitter4j](http://twitter4j.org/en/index.html)

@@ -68,9 +68,16 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		if (fragment == null) {
 			fragment = Fragment.instantiate(this, HomeTweets.class.getName());
-			ft.add(fragment, "home");
+			ft.add(R.id.RelativeLayout, fragment, "home");
 		} else {
-			ft.attach(fragment);
+			if (tab.getPosition() == 0) {
+				fragment = Fragment.instantiate(this,
+						HomeTweets.class.getName());
+			} else if (tab.getPosition() == 1) {
+				fragment = Fragment.instantiate(this, Mentions.class.getName());
+			}
+			ft.replace(R.id.RelativeLayout, fragment);
+
 		}
 	}
 

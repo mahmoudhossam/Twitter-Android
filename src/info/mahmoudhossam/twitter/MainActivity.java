@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -18,6 +17,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	private ActionBar actionbar;
 	private Fragment fragment;
+	private String fragmentTag;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +57,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == R.id.refresh) {
-			Toast.makeText(getApplicationContext(), "Refresh clicked",
-					Toast.LENGTH_SHORT).show();
+			TweetFragment fragment = (TweetFragment) getSupportFragmentManager()
+					.findFragmentByTag(fragmentTag);
+			fragment.refresh();
 			return true;
 		} else if (itemId == R.id.compose) {
 			startActivity(new Intent(this, PostStatus.class));
@@ -71,17 +72,20 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		if (fragment == null) {
 			fragment = Fragment.instantiate(this, HomeTweets.class.getName());
-			ft.add(R.id.RelativeLayout, fragment, "home");
+			fragmentTag = "home";
+			ft.add(R.id.RelativeLayout, fragment, fragmentTag);
 		} else {
 			if (tab.getPosition() == 0) {
 				fragment = Fragment.instantiate(this,
 						HomeTweets.class.getName());
 			} else if (tab.getPosition() == 1) {
 				fragment = Fragment.instantiate(this, Mentions.class.getName());
+				fragmentTag = "mentions";
 			} else {
 				fragment = Fragment.instantiate(this, UserTweets.class.getName());
+				fragmentTag = "user";
 			}
-			ft.replace(R.id.RelativeLayout, fragment);
+			ft.replace(R.id.RelativeLayout, fragment, fragmentTag);
 
 		}
 	}

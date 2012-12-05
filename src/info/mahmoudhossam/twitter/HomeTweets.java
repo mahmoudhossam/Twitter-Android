@@ -4,38 +4,15 @@ import java.util.List;
 
 import twitter4j.Paging;
 import twitter4j.Status;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.actionbarsherlock.app.SherlockListFragment;
-
-public class HomeTweets extends SherlockListFragment {
-
-	private Twitter twitter;
-	private Paging paging;
+public class HomeTweets extends TweetFragment {
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		initializeVariables();
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		refresh();
-	}
-
-	private void refresh() {
+	public void refresh() {
 		new RetrieveTweets().execute(paging);
-	}
-
-	private void initializeVariables() {
-		twitter = TwitterBackend.getTwitterInstance();
-		paging = new Paging(1, 20);
 	}
 
 	class RetrieveTweets extends AsyncTask<Paging, Integer, List<Status>> {

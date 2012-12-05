@@ -1,5 +1,6 @@
 package info.mahmoudhossam.twitter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -60,8 +61,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					Toast.LENGTH_SHORT).show();
 			return true;
 		} else if (itemId == R.id.compose) {
-			Toast.makeText(getApplicationContext(), "New tweet!",
-					Toast.LENGTH_SHORT).show();
+			startActivity(new Intent(this, PostStatus.class));
 			return true;
 		} else
 			return false;

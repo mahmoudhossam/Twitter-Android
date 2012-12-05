@@ -26,8 +26,6 @@ public class PostStatus extends Activity {
 	public void onTweet(View view) {
 		String tweet = text.getText().toString();
 		new StatusPoster().execute(tweet);
-
-		finish();
 	}
 
 	class StatusPoster extends AsyncTask<String, Integer, Status> {

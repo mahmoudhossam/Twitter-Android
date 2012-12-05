@@ -38,8 +38,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 				.setTabListener(this);
 		ActionBar.Tab home = actionbar.newTab().setText(R.string.home)
 				.setTabListener(this);
+		ActionBar.Tab user = actionbar.newTab().setText(R.string.my_profile)
+				.setTabListener(this);
 		actionbar.addTab(home);
 		actionbar.addTab(mentions);
+		actionbar.addTab(user);
 	}
 
 	@Override
@@ -75,6 +78,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 						HomeTweets.class.getName());
 			} else if (tab.getPosition() == 1) {
 				fragment = Fragment.instantiate(this, Mentions.class.getName());
+			} else {
+				fragment = Fragment.instantiate(this, UserTweets.class.getName());
 			}
 			ft.replace(R.id.RelativeLayout, fragment);
 

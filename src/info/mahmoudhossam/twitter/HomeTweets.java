@@ -21,6 +21,15 @@ public class HomeTweets extends SherlockListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initializeVariables();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		refresh();
+	}
+
+	private void refresh() {
 		new RetrieveTweets().execute(paging);
 	}
 

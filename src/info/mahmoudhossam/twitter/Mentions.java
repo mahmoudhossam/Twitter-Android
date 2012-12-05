@@ -26,12 +26,6 @@ public class Mentions extends SherlockListFragment {
 		super.onStart();
 		refresh();
 	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		setListAdapter(null);
-	}
 
 	private void initializeVariables() {
 		twitter = TwitterBackend.getTwitterInstance();

@@ -1,10 +1,9 @@
 package info.mahmoudhossam.twitter;
 
+import android.os.Bundle;
+import com.actionbarsherlock.app.SherlockListFragment;
 import twitter4j.Paging;
 import twitter4j.Twitter;
-import android.os.Bundle;
-
-import com.actionbarsherlock.app.SherlockListFragment;
 
 public abstract class TweetFragment extends SherlockListFragment {
 

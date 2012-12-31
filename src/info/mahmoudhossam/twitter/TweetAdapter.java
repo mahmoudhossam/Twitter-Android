@@ -1,14 +1,14 @@
 package info.mahmoudhossam.twitter;
 
-import java.util.List;
-
-import twitter4j.Status;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import twitter4j.Status;
+
+import java.util.List;
 
 public class TweetAdapter extends BaseAdapter {
 
@@ -59,3 +59,4 @@ public class TweetAdapter extends BaseAdapter {
 	}
 
 }
+

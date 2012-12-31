@@ -1,7 +1,5 @@
 package info.mahmoudhossam.twitter;
 
-import java.util.concurrent.ExecutionException;
-
 import android.os.AsyncTask;
 import android.util.Log;
 import twitter4j.Twitter;
@@ -9,6 +7,8 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
+
+import java.util.concurrent.ExecutionException;
 
 public class TwitterBackend {
 

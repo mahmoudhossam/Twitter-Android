@@ -1,13 +1,17 @@
 package info.mahmoudhossam.twitter;
 
-import twitter4j.auth.AccessToken;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+import twitter4j.auth.AccessToken;
 
 public class Login extends Activity {
 
@@ -29,17 +33,44 @@ public class Login extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initializeVariables();
-		if (tokenExists()) {
-			getToken();
-			backend.twitterInit(token);
-			finish();
-			startActivity(new Intent(getApplicationContext(), MainActivity.class));
-		} else {
-			login();
-		}
+        if (!checkNetwork()) {
+            AlertDialog dialog = createDialog();
+            dialog.show();
+        } else {
+            initializeVariables();
+            if (tokenExists()) {
+                getToken();
+                backend.twitterInit(token);
+                finish();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            } else {
+                login();
+            }
+        }
 
 	}
+
+    private boolean checkNetwork() {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo info = connMgr.getActiveNetworkInfo();
+        if (info == null) {
+            return false;
+        } return info.isConnected();
+    }
+
+    private AlertDialog createDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("No connectivity");
+        builder.setMessage("Cannot connect to twitter.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                finish();
+            }
+        });
+        return builder.create();
+    }
 
 	private void login() {
 		Intent intent = new Intent(getApplicationContext(), Browser.class);

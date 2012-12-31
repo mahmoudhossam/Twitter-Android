@@ -1,4 +1,4 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +11,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+import info.mahmoudhossam.twitter.R;
+import info.mahmoudhossam.twitter.TwitterBackend;
 import twitter4j.auth.AccessToken;
 
 public class Login extends Activity {

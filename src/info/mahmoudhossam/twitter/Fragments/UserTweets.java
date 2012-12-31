@@ -1,9 +1,12 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Fragments;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ListView;
+import info.mahmoudhossam.twitter.R;
+import info.mahmoudhossam.twitter.Activities.Tweet;
+import info.mahmoudhossam.twitter.TweetAdapter;
 import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.TwitterException;

@@ -1,28 +1,30 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Fragments;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import info.mahmoudhossam.twitter.R;
+import info.mahmoudhossam.twitter.Activities.Tweet;
+import info.mahmoudhossam.twitter.TweetAdapter;
 import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import java.util.List;
 
-public class HomeTweets extends TweetFragment {
+public class Mentions extends TweetFragment {
 
-    private List<Status> home;
+    private List<Status> mentions;
 
-    @Override
+	@Override
 	public void refresh() {
 		new RetrieveTweets().execute(paging);
 	}
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Status status = home.get(position);
+        Status status = mentions.get(position);
         Intent intent = new Intent(getActivity(), Tweet.class);
         intent.putExtra("text", status.getText());
         intent.putExtra("username", status.getUser().getScreenName());
@@ -31,19 +33,19 @@ public class HomeTweets extends TweetFragment {
         startActivity(intent);
     }
 
-	private class RetrieveTweets extends AsyncTask<Paging, Integer, List<Status>> {
+    private class RetrieveTweets extends AsyncTask<Paging, Integer, List<twitter4j.Status>> {
 
 		@Override
-		protected List<twitter4j.Status> doInBackground(Paging... params) {
+		protected List<twitter4j.Status> doInBackground(Paging... arg0) {
 			try {
-				home = twitter.getHomeTimeline(params[0]);
-                return home;
+				mentions = twitter.getMentions(arg0[0]);
+                return mentions;
 			} catch (TwitterException e) {
-				Log.e("Twitter", e.getMessage());
+				e.printStackTrace();
 				return null;
 			}
 		}
-
+		
 		@Override
 		protected void onPostExecute(List<twitter4j.Status> result) {
 			if (result != null) {
@@ -51,7 +53,6 @@ public class HomeTweets extends TweetFragment {
 						.getApplicationContext(), R.layout.tweet, result));
 			}
 		}
-
+		
 	}
-
 }

@@ -1,7 +1,8 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Fragments;
 
 import android.os.Bundle;
 import com.actionbarsherlock.app.SherlockListFragment;
+import info.mahmoudhossam.twitter.TwitterBackend;
 import twitter4j.Paging;
 import twitter4j.Twitter;
 

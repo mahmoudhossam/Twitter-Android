@@ -1,9 +1,10 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import info.mahmoudhossam.twitter.R;
 
 public class Tweet extends Activity {
 

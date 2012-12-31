@@ -1,4 +1,4 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Activities;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import info.mahmoudhossam.twitter.R;
+import info.mahmoudhossam.twitter.TwitterBackend;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

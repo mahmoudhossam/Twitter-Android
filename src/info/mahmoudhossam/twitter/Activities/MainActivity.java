@@ -1,4 +1,4 @@
-package info.mahmoudhossam.twitter;
+package info.mahmoudhossam.twitter.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import info.mahmoudhossam.twitter.Fragments.HomeTweets;
+import info.mahmoudhossam.twitter.Fragments.Mentions;
+import info.mahmoudhossam.twitter.Fragments.TweetFragment;
+import info.mahmoudhossam.twitter.Fragments.UserTweets;
+import info.mahmoudhossam.twitter.R;
 
 public class MainActivity extends SherlockFragmentActivity implements
 		ActionBar.TabListener {

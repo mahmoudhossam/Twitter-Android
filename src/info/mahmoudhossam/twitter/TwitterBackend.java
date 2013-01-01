@@ -8,8 +8,6 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
-import java.util.concurrent.ExecutionException;
-
 public class TwitterBackend {
 
 	private static Twitter twitter;
@@ -25,9 +23,7 @@ public class TwitterBackend {
 	public String getAuthorizationURL() {
 		try {
 			return new AuthURLGetter().execute().get();
-		} catch (InterruptedException e) {
-			Log.e("twitter", e.getMessage());
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			Log.e("twitter", e.getMessage());
 		}
 		return null;
@@ -44,15 +40,13 @@ public class TwitterBackend {
 	public void setAccessToken(String verifier) {
 		try {
 			token = new AccessTokenGetter().execute(verifier).get();
-		} catch (InterruptedException e) {
-			Log.e("Twitter", e.getMessage());
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			Log.e("Twitter", e.getMessage());
 		}
 	}
 
 	public void twitterInit(AccessToken accessToken) {
-		token = accessToken;
+		setAccessToken(accessToken.getToken(), accessToken.getTokenSecret());
 		twitterInit();
 	}
 
@@ -64,7 +58,7 @@ public class TwitterBackend {
 		return twitter;
 	}
 
-	class AuthURLGetter extends AsyncTask<String, Integer, String> {
+	private class AuthURLGetter extends AsyncTask<String, Integer, String> {
 
 		@Override
 		protected String doInBackground(String... arg0) {
@@ -78,7 +72,7 @@ public class TwitterBackend {
 		}
 	}
 
-	class AccessTokenGetter extends AsyncTask<String, Integer, AccessToken> {
+	private class AccessTokenGetter extends AsyncTask<String, Integer, AccessToken> {
 
 		@Override
 		protected AccessToken doInBackground(String... arg0) {

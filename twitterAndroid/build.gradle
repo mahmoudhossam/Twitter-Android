@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "info.mahmoudhossam.twitter"
-        minSdkVersion 7
+        minSdkVersion 16
         targetSdkVersion 19
     }
 

@@ -1,9 +1,7 @@
-.project
-.classpath
-.settings/
-values/twitter.xml
-bin/
-gen/
-.idea
-*.iml
-out/
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+twitterAndroid/build

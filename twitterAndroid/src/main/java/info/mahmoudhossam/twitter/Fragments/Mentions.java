@@ -38,7 +38,7 @@ public class Mentions extends TweetFragment {
 		@Override
 		protected List<twitter4j.Status> doInBackground(Paging... arg0) {
 			try {
-				mentions = twitter.getMentions(arg0[0]);
+				mentions = twitter.getMentionsTimeline(arg0[0]);
                 return mentions;
 			} catch (TwitterException e) {
 				e.printStackTrace();
